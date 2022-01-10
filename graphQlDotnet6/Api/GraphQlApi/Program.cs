@@ -1,8 +1,11 @@
 using GraphQL.MicrosoftDI;
 using GraphQL.Server;
+using GraphQL.Server.Authorization.AspNetCore;
 using GraphQL.Types;
+using GraphQL.Validation;
 using GraphQlApi.Notes;
 using GraphQlApi.Repository;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,11 +19,14 @@ builder.Services.AddDbContext<NotesContext>(options =>
 //Add notes schema
 builder.Services.AddSingleton<ISchema, NotesSchema>(services => new NotesSchema(new SelfActivatingServiceProvider(services)));
 
+builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
 // register graphQL
 builder.Services.AddGraphQL(options =>
 {
     options.EnableMetrics = true;
-}).AddSystemTextJson();
+}).AddGraphQLAuthorization(options=> { options.AddPolicy("Authorized", p => p.RequireAuthenticatedUser()); }).AddSystemTextJson();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o => o.Cookie.Name = "graph-auth");
 
 builder.Services.AddControllers();
 
@@ -53,7 +59,7 @@ app.UseCors();
 
 app.UseAuthorization();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 
