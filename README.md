@@ -10,3 +10,43 @@ https://apollo-angular.com/
 https://dev.to/berviantoleo/series/15056
 
 https://graphql-aspnet.github.io/docs/development/unit-testing#create-a-test-server
+
+
+### Mutataion
+```
+mutation
+{
+	createNote(message:"Test")
+	{
+  	id
+  	message
+  
+	}
+}
+
+```
+
+### Query
+Query 1
+```
+{
+  notesFromEF
+  {
+    id,
+    message
+  }
+}
+
+```
+Query 2
+
+```
+{
+  notes
+  {
+    id,
+    message
+  }
+}
+```
+
