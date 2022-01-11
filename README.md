@@ -15,6 +15,11 @@ https://graphql-aspnet.github.io/docs/development/unit-testing#create-a-test-ser
 #### Subscription .dot net
 https://graphql-dotnet.github.io/docs/getting-started/subscriptions/
 
+#### Database
+Data migration using (localdb)\ProjectsV13
+
+PM> update-database
+
 
 #### Mutataion
 ```
