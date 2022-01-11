@@ -6,11 +6,16 @@ mutation createNote($message:String!)
         createNote(message:$message){
         id
         message
-      
       }
-    
   }
 `
+   
+const get_Notes = gql `{
+    notesFromEF {
+    id
+    message
+  }
+}`
 @Injectable({providedIn: 'root'})
 
 
@@ -22,8 +27,13 @@ public CreateNote(message:string){
     return this.apollo.mutate(
         {mutation: create_note,
         variables: {message}
-    }
-    );
+    });
+}
+
+public GetNotes(){
+    return this.apollo.watchQuery({
+        query: get_Notes
+    });
 }
     
 }

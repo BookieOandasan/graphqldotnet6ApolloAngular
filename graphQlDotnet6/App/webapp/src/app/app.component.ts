@@ -13,32 +13,34 @@ export class AppComponent implements OnInit {
   loading = true;
   error: any;
 
-  constructor(private apollo: Apollo, private appService: AppService) {}
+  constructor(private appService: AppService) {}
 
   ngOnInit() {
-    this.apollo
-      .watchQuery({
-        query: gql`
-        {
-          notesFromEF {
-          id
-          message
-        }
-      }
-        `,
-      })
-      .valueChanges.subscribe((result: any) => {
-        this.notesFromEF = result?.data?.notesFromEF;
-        console.log(result?.data);
-        this.loading = result.loading;
-        this.error = result.error;
-      });
+    this.loadNotes(); 
+  }
+
+  private loadNotes(){
+    this.appService.GetNotes()
+    .valueChanges.subscribe((result: any) => {
+      this.notesFromEF = result?.data?.notesFromEF;
+      console.log(result?.data);
+      this.loading = result.loading;
+      this.error = result.error;
+    });
   }
 
   public createNewMessage(message: string)
   {
-    this.appService.CreateNote(message).subscribe(() =>{
-      console.log("Created")
-    })
+    this.appService.CreateNote(message).subscribe(
+      () =>{
+      console.log("Created");
+      
+    },
+    (error)=>{ console.log("error");},
+    ()=>{
+      console.log("Completed");
+      this.loadNotes();
+    },
+    )
   }
 }
