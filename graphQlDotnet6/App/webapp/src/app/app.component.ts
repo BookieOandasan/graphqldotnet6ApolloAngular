@@ -1,38 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import {Apollo, gql} from 'apollo-angular';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
-  //templateUrl: './app.component.html',
-  //selector: 'exchange-rates',
-  template: `
-    <div *ngIf="loading">
-      Loading...
-    </div>
-    <div *ngIf="error">
-      Error :(
-    </div>
-    <div *ngIf="notes">
-      <div *ngFor="let rate of notes">
-        <p>{{ rate.id }}: {{ rate.message }}</p>
-      </div>
-    </div>
-  `,
+  templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent implements OnInit {
-  notes!: any[];
+  notesFromEF!: any[];
   loading = true;
   error: any;
 
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo, private appService: AppService) {}
 
   ngOnInit() {
     this.apollo
       .watchQuery({
         query: gql`
         {
-          notes {
+          notesFromEF {
           id
           message
         }
@@ -40,9 +28,17 @@ export class AppComponent implements OnInit {
         `,
       })
       .valueChanges.subscribe((result: any) => {
-        this.notes = result?.data?.notes;
+        this.notesFromEF = result?.data?.notesFromEF;
+        console.log(result?.data);
         this.loading = result.loading;
         this.error = result.error;
       });
+  }
+
+  public createNewMessage(message: string)
+  {
+    this.appService.CreateNote(message).subscribe(() =>{
+      console.log("Created")
+    })
   }
 }
