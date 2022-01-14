@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {Apollo, gql} from 'apollo-angular';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Apollo, gql, QueryRef} from 'apollo-angular';
+import { Subscription } from 'rxjs';
 import { AppService } from './app.service';
 
 @Component({
@@ -8,27 +9,30 @@ import { AppService } from './app.service';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   notesFromEF!: any[];
   loading = true;
+  postQuery : QueryRef<any> | undefined;
+
+  private querySubscription: Subscription | undefined;
   error: any;
 
   constructor(private appService: AppService) {}
+  ngOnDestroy(): void {
+    this.querySubscription?.unsubscribe();
+  }
 
   ngOnInit() {
-    this.loadNotes(); 
-  }
+    this.postQuery = this.appService.GetNotes();
 
-  private loadNotes(){
-    this.appService.GetNotes()
-    .valueChanges.subscribe((result: any) => {
-      this.notesFromEF = result?.data?.notesFromEF;
-      console.log(result?.data);
-      this.loading = result.loading;
-      this.error = result.error;
+    this.querySubscription = this.postQuery.valueChanges
+    .subscribe(({data, loading}) => {
+      this.loading = loading;
+      this.notesFromEF = data.notesFromEF;
     });
+      
+  
   }
-
   public createNewMessage(message: string)
   {
     this.appService.CreateNote(message).subscribe(
@@ -39,8 +43,12 @@ export class AppComponent implements OnInit {
     (error)=>{ console.log("error");},
     ()=>{
       console.log("Completed");
-      this.loadNotes();
+      this.refresh();
     },
     )
+  }
+
+  refresh(){
+    this.postQuery?.refetch();
   }
 }

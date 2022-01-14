@@ -32,7 +32,8 @@ public CreateNote(message:string){
 
 public GetNotes(){
     return this.apollo.watchQuery({
-        query: get_Notes
+        query: get_Notes,
+        pollInterval : 500
     });
 }
     

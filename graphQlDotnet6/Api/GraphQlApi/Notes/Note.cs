@@ -8,5 +8,6 @@ namespace GraphQlApi.Notes
         
         [Required]
         public string Message { get; set; }
+        //public string? Sub { get; internal set; }
     }
 }

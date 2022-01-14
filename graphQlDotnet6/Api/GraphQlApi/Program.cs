@@ -4,6 +4,7 @@ using GraphQL.Server.Authorization.AspNetCore;
 using GraphQL.Types;
 using GraphQL.Validation;
 using GraphQlApi.Notes;
+using GraphQlApi.Notes.Subscription;
 using GraphQlApi.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddSingleton<INotePublish, NotePublish>();
 
 builder.Services.AddDbContext<NotesContext>(options =>
 {
