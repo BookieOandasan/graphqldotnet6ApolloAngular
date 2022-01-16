@@ -7,7 +7,7 @@ namespace GraphQlApi.Notes
         public NotesSchema(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             Query = serviceProvider.GetRequiredService<NotesQuery>();
-            Mutation = serviceProvider.GetRequiredService<NotesMutation>();
+            Mutation   = serviceProvider.GetRequiredService<NotesMutation>();
         }
     }
 }

@@ -4,19 +4,45 @@
 <div *ngIf="error">
   Error :(
 </div>
-<div *ngIf="notesFromEF">
-  <div *ngFor="let rate of notesFromEF">
-    <p>Message: {{ rate.message }}</p>
-  </div>
-</div>
-
-<div>
+<div class="m-3">
   Mutation
 
-  <div>
+  <div> Add Note:
     <input type="text"  id="txtMessage" #txtMessage>
 <br/>
-<button title="Save" (click)="createNewMessage(txtMessage.value)">Save</button>
+<button class="btn btn-primary btn-sm" title="Save" (click)="createNewMessage(txtMessage.value)">Add</button>
   </div>
 </div>
+<div *ngIf="notesFromEF">
+  <div *ngFor="let note of notesFromEF" class="container-fluid">
+    <div class="card m-2 card-sm">
+      <div class="card-header  bg-light">{{note.message}}</div>
+      <div class="card-body">
+        <div *ngIf="!editMode">Message: {{ note.message }}</div>
+        <div *ngIf="!editMode">Create Date: {{ note.createDate | date}} </div>
+        <div *ngIf="!editMode">Create By: {{ note.createBy}} </div>
+        <div *ngIf="editMode">
+          <input type="text" id="txtEditMessage" value="{{ note.message }}" #txtEditMessage >
+        </div>
+        <div *ngIf="!editMode" class="m-2">
+         <button class="btn btn-danger btn-sm" (click) ="deleteMessage(note)" >Delete</button>
+        </div>
+         
+         <div *ngIf="!editMode" class="m-2">
+           <button class="btn btn-primary btn-sm"  (click) ="editMessage()" >Edit</button>
+         </div>
+         <div *ngIf="editMode" class="m-2">
+           <button class="btn btn-primary btn-sm m-2"  (click) ="saveMessage(note)" >Save</button>
+           <button class="btn btn-primary btn-sm m-2" (click) ="cancel()" >Cancel</button>
+         </div>
+      </div>
+    </div>
+  
+  
+  </div>
+  
+</div>
+
+
+
  

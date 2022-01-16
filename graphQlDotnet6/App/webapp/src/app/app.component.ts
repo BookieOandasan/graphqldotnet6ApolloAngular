@@ -13,6 +13,7 @@ export class AppComponent implements OnInit, OnDestroy {
   notesFromEF!: any[];
   loading = true;
   postQuery : QueryRef<any> | undefined;
+  editMode = false;
 
   private querySubscription: Subscription | undefined;
   error: any;
@@ -36,19 +37,42 @@ export class AppComponent implements OnInit, OnDestroy {
   public createNewMessage(message: string)
   {
     this.appService.CreateNote(message).subscribe(
-      () =>{
-      console.log("Created");
-      
-    },
+      () =>{console.log("Created");},
     (error)=>{ console.log("error");},
     ()=>{
       console.log("Completed");
       this.refresh();
     },
-    )
+    );
   }
 
   refresh(){
     this.postQuery?.refetch();
+  }
+
+  public deleteMessage(selectedNote:any){
+
+    var test = selectedNote;
+    this.appService.DeleteNote(selectedNote).subscribe(
+      () =>{console.log("Created");},
+    (error)=>{ console.log("error");},
+    ()=>{
+      console.log("Completed");
+      this.refresh();
+    },
+    );
+
+  }
+
+  public editMessage(){
+    this.editMode = true;
+  }
+
+  public saveMessage(selectedNote:any){
+
+  }
+
+  public cancel(){
+    this.editMode = false;
   }
 }

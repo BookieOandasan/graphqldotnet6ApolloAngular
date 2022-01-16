@@ -14,20 +14,28 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddSingleton<INotePublish, NotePublish>();
+builder.Services.AddScoped<INotesContext, NotesContext>();
+builder.Services.AddScoped<IRepository, Repository>();
 
 builder.Services.AddDbContext<NotesContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 //Add notes schema
-builder.Services.AddSingleton<ISchema, NotesSchema>(services => new NotesSchema(new SelfActivatingServiceProvider(services)));
+builder.Services.AddScoped<ISchema, NotesSchema>(services =>
+    new NotesSchema(new SelfActivatingServiceProvider(services))
+
+);
 
 builder.Services.AddTransient<IValidationRule, AuthorizationValidationRule>();
+
+
 // register graphQL
 builder.Services.AddGraphQL(options =>
-{
-    options.EnableMetrics = true;
-}).AddGraphQLAuthorization(options=> { options.AddPolicy("Authorized", p => p.RequireAuthenticatedUser()); }).AddSystemTextJson();
+    {
+        options.EnableMetrics = true;
+    })
+    .AddGraphQLAuthorization(options=> { options.AddPolicy("Authorized", p => p.RequireAuthenticatedUser()); }).AddSystemTextJson();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o => o.Cookie.Name = "graph-auth");
 

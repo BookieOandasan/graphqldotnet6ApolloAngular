@@ -9,17 +9,39 @@ mutation createNote($message:String!)
       }
   }
 `
-   
+const delete_note = gql `
+mutation deleteNote($noteToDelete:any!)
+      {
+        deleteNote(noteToDelete:$noteToDelete){
+        id
+        message
+      }
+  }
+`
+  
 const get_Notes = gql `{
     notesFromEF {
-    id
-    message
+        id,
+        message,
+        createBy,
+        createDate,
+        lastModifiedBy,
+        lastModifiedDate,
+        isUrgent
   }
 }`
 @Injectable({providedIn: 'root'})
 
 
 export class AppService {
+ 
+    DeleteNote(selectedNote: any) {
+        var noteToDelete =selectedNote;
+    return this.apollo.mutate(
+        {mutation: delete_note,
+        variables: {selectedNote}
+    });
+  }
 
     constructor(private apollo: Apollo) { }
 
@@ -36,5 +58,7 @@ public GetNotes(){
         pollInterval : 500
     });
 }
+
+
     
 }
