@@ -1,6 +1,7 @@
 using GraphQL.MicrosoftDI;
 using GraphQL.Server;
 using GraphQL.Server.Authorization.AspNetCore;
+using GraphQL.Server.Ui.Playground;
 using GraphQL.Types;
 using GraphQL.Validation;
 using GraphQlApi.Notes;
@@ -63,6 +64,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     // add altair UI to development only
     app.UseGraphQLAltair();
+    app.UseGraphQLPlayground(options: new PlaygroundOptions());
 }
 
 app.UseHttpsRedirection();

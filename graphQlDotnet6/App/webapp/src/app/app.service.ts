@@ -10,13 +10,11 @@ mutation createNote($message:String!)
   }
 `
 const delete_note = gql `
-mutation deleteNote($noteToDelete:any!)
-      {
-        deleteNote(noteToDelete:$noteToDelete){
-        id
-        message
-      }
-  }
+mutation($noteId:ID!)
+{
+  deleteNote(noteId:$noteId)
+ 
+}
 `
   
 const get_Notes = gql `{
@@ -35,11 +33,11 @@ const get_Notes = gql `{
 
 export class AppService {
  
-    DeleteNote(selectedNote: any) {
-        var noteToDelete =selectedNote;
+    DeleteNote(noteId: any) {
+        var noteToDelete =noteId;
     return this.apollo.mutate(
         {mutation: delete_note,
-        variables: {selectedNote}
+        variables: {noteId}
     });
   }
 
@@ -58,7 +56,5 @@ public GetNotes(){
         pollInterval : 500
     });
 }
-
-
     
 }

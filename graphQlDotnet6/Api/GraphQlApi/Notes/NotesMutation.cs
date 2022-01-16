@@ -23,6 +23,11 @@ namespace GraphQlApi.Notes
                     var note = new Note
                     {
                         Message = message,
+                        CreateBy = Environment.UserName,
+                        CreateDate = DateTime.Now,
+                        LastModifiedBy = Environment.UserName,
+                        LastModifiedDate = DateTime.Now,
+                        IsUrgent = false,
                     };
                     notesContext.Notes.Add(note);
                     notesContext.SaveChanges();
@@ -30,7 +35,7 @@ namespace GraphQlApi.Notes
                 }
             );
 
-            Field<NoteType>(
+            Field<StringGraphType>(
                 "deleteNote",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> {Name = "noteId"}),
                 resolve: context =>

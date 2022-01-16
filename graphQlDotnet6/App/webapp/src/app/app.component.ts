@@ -53,7 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public deleteMessage(selectedNote:any){
 
     var test = selectedNote;
-    this.appService.DeleteNote(selectedNote).subscribe(
+    this.appService.DeleteNote(selectedNote.id).subscribe(
       () =>{console.log("Created");},
     (error)=>{ console.log("error");},
     ()=>{
