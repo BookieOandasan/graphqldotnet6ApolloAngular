@@ -5,7 +5,6 @@ namespace GraphQlApi.Notes
 {
     public class NotesQuery : ObjectGraphType<Note>
     {
-
         public NotesQuery(IRepository repository)
         {
             Field<ListGraphType<NoteType>>("notesFromEF", resolve: context =>

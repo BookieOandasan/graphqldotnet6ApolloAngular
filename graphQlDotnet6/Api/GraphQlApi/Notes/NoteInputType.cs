@@ -7,7 +7,6 @@ namespace GraphQlApi.Notes
         public NoteInputType()
         {
             Name = "noteInput";
-            Field<NonNullGraphType<StringGraphType>>("id");
             Field<NonNullGraphType<StringGraphType>>("message");
             Field<NonNullGraphType<StringGraphType>>("isUrgent");
         }

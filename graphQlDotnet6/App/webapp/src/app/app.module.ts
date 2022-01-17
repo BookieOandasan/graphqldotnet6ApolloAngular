@@ -7,6 +7,8 @@ import { HttpClientModule } from '@angular/common/http';
 import {APOLLO_NAMED_OPTIONS, NamedOptions} from 'apollo-angular';
 import {HttpLink} from 'apollo-angular/http';
 import {InMemoryCache} from '@apollo/client/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import {InMemoryCache} from '@apollo/client/core';
     BrowserModule,
     AppRoutingModule,
     GraphQLModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatCheckboxModule 
   ],
   providers: [
     {
@@ -33,6 +37,7 @@ import {InMemoryCache} from '@apollo/client/core';
         };
       },
       deps: [HttpLink],
+      
     },
   ],
   bootstrap: [AppComponent]

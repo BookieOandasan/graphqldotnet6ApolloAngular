@@ -43,14 +43,23 @@ namespace GraphQlApi.Repository
             return note;
         }
 
-        public Note GetNoteById(Guid id)
+        public Note? GetNoteById(Guid id)
         {
-            return Notes.FirstOrDefault(f => f.Id == id);
+            return  Notes.FirstOrDefault(f => f.Id == id);
+
         }
 
         public IQueryable<Note> GetAllNotes()
         {
             return Notes.AsQueryable();
+        }
+
+        public Note? CreateNote(Note note)
+        {
+            Notes.Add(note);
+            SaveChanges();
+
+            return note;
         }
     }
 }

@@ -7,7 +7,6 @@ namespace GraphQlApi.Notes
     public class NotesMutation : ObjectGraphType
     {
         
-
         public NotesMutation(IRepository repository)
         {
            
@@ -19,7 +18,6 @@ namespace GraphQlApi.Notes
                 resolve: context =>
                 {
                     var message = context.GetArgument<string>("message");
-                    var notesContext = context.RequestServices.GetRequiredService<NotesContext>();
                     var note = new Note
                     {
                         Message = message,
@@ -29,9 +27,9 @@ namespace GraphQlApi.Notes
                         LastModifiedDate = DateTime.Now,
                         IsUrgent = false,
                     };
-                    notesContext.Notes.Add(note);
-                    notesContext.SaveChanges();
-                    return note;
+
+                   return repository.CreateNote(note);
+                   
                 }
             );
 
@@ -50,16 +48,14 @@ namespace GraphQlApi.Notes
             Field<NoteType>(
                "updateNote",
                arguments: new QueryArguments(
-                   new QueryArgument<NonNullGraphType<NoteInputType>> { Name = "noteInput" },
-                   //new QueryArgument<NonNullGraphType<NoteInputType>> { Name = "isUrgent" },
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
+                     new QueryArgument<NonNullGraphType<NoteInputType>> { Name = "note" },
+                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "noteId" }
                    ),
                resolve: context =>
                {
-                   //var isUrgent = context.GetArgument<Note>("isUrgent");
-                   var message = context.GetArgument<Note>("message");
+                   var message = context.GetArgument<Note>("note");
 
-                   var id = context.GetArgument<Guid>("id");
+                   var id = context.GetArgument<Guid>("noteId");
                   
 
 
@@ -67,10 +63,17 @@ namespace GraphQlApi.Notes
 
                    if (noteToUpdate == null)
                    {
-                       new Exception("Note not found in the Database");
+                      return "Note not found in the Database";
                    }
 
+                   if (message == null)
+                   {
+                       return "Note input cannot b null";
+                   }
                    noteToUpdate.Message = message.Message;
+                   noteToUpdate.IsUrgent = message.IsUrgent;
+                   noteToUpdate.LastModifiedBy = Environment.UserName;
+                   noteToUpdate.LastModifiedDate = DateTime.Now;
 
                    return repository.UpdateNote(noteToUpdate);
                }

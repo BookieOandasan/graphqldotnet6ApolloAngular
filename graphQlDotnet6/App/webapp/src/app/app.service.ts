@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
+import { NoteInput } from './noteInput.Model';
+
 const create_note = gql `
 mutation createNote($message:String!)
       {
@@ -28,20 +30,34 @@ const get_Notes = gql `{
         isUrgent
   }
 }`
+
+const update_note = gql `
+mutation($note: noteInput!,$noteId:ID!)
+{
+  updateNote(note:$note,noteId:$noteId)
+  {
+    id,
+    message,
+    isUrgent,
+    lastModifiedBy,
+    lastModifiedDate
+  }
+}
+`
 @Injectable({providedIn: 'root'})
 
 
 export class AppService {
  
-    DeleteNote(noteId: any) {
+  constructor(private apollo: Apollo) { }
+  
+  public DeleteNote(noteId: any) {
         var noteToDelete =noteId;
     return this.apollo.mutate(
         {mutation: delete_note,
         variables: {noteId}
     });
   }
-
-    constructor(private apollo: Apollo) { }
 
 public CreateNote(message:string){
     return this.apollo.mutate(
@@ -55,6 +71,14 @@ public GetNotes(){
         query: get_Notes,
         pollInterval : 500
     });
+  }
+
+public UpdateNote(note: NoteInput, noteId:any) {
+   //TODO: set isUrgent
+return this.apollo.mutate(
+    {mutation: update_note,
+    variables: {note, noteId}
+});
 }
     
 }

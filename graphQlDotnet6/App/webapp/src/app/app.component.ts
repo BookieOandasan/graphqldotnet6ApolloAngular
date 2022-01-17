@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import {Apollo, gql, QueryRef} from 'apollo-angular';
 import { Subscription } from 'rxjs';
 import { AppService } from './app.service';
+import { NoteInput } from './noteInput.Model';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private querySubscription: Subscription | undefined;
   error: any;
+  noteCreatedMessage: string = "Test";
+  showNoteCreatedMessage: boolean = false;
+  inputText:string ='';
 
   constructor(private appService: AppService) {}
   ngOnDestroy(): void {
@@ -34,14 +38,20 @@ export class AppComponent implements OnInit, OnDestroy {
       
   
   }
-  public createNewMessage(message: string)
+  public createNewNote(message: string)
   {
     this.appService.CreateNote(message).subscribe(
-      () =>{console.log("Created");},
+      () =>{console.log("Created")
+      
+      ;},
     (error)=>{ console.log("error");},
     ()=>{
       console.log("Completed");
+      
       this.refresh();
+      this.noteCreatedMessage ="Note successfully created!"
+      this.showNoteCreatedMessage = true;
+      this.inputText ='';
     },
     );
   }
@@ -50,7 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.postQuery?.refetch();
   }
 
-  public deleteMessage(selectedNote:any){
+  public deleteNote(selectedNote:any){
 
     var test = selectedNote;
     this.appService.DeleteNote(selectedNote.id).subscribe(
@@ -64,12 +74,25 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
-  public editMessage(){
+  public editNote(){
     this.editMode = true;
   }
 
-  public saveMessage(selectedNote:any){
-
+  public updateNote(selectedNote:any, editMessage:any){
+     //TODO: set isUrgent
+    var note:NoteInput = new NoteInput() ;
+        note.message = editMessage;
+      note.isUrgent = selectedNote.isUrgent? "true" : "false";
+    this.appService.UpdateNote(note, selectedNote.id).subscribe(
+      () =>{console.log("Upate");},
+    (error)=>{ 
+      var er = error.
+      console.log(error);},
+    ()=>{
+      console.log("Upate");
+      this.refresh();
+    },
+    );
   }
 
   public cancel(){

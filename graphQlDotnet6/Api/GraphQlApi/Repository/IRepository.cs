@@ -6,7 +6,8 @@ namespace GraphQlApi.Repository
     {
         string DeleteNote(Guid noteToDelete);
         Note? UpdateNote(Note? noteToUpdate);
-        Note GetNoteById(Guid id);
+        Note? GetNoteById(Guid id);
         IQueryable<Note> GetAllNotes();
+        Note? CreateNote(Note note);
     }
 }

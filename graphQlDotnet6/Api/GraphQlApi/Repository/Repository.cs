@@ -10,6 +10,12 @@ namespace GraphQlApi.Repository
         {
             _notesContext = notesContext;
         }
+
+        public Note? CreateNote(Note note)
+        {
+            return _notesContext.CreateNote(note);
+        }
+
         public string DeleteNote(Guid noteToDelete)
         {
             return _notesContext.DeleteNote(noteToDelete);
@@ -20,7 +26,7 @@ namespace GraphQlApi.Repository
             return _notesContext.GetAllNotes();
         }
 
-        public Note GetNoteById(Guid id)
+        public Note? GetNoteById(Guid id)
         {
             return _notesContext.GetNoteById(id);
         }
