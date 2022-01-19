@@ -16,12 +16,12 @@
     {{noteCreatedMessage}}
 </div>
 </div>
-<div *ngIf="notesFromEF">
+<!-- <div *ngIf="notesFromEF">
   <div *ngFor="let note of notesFromEF" class="container-fluid">
     <div class="card m-2 card-sm">
       <div class="card-header  bg-light">Message from {{note.createBy}} : {{note.message}} Last updated by: {{note.lastModifiedBy}}</div>
       <div class="card-body">
-        <!-- <div *ngIf="!editMode">Message: {{ note.message }}</div> -->
+         <div *ngIf="!editMode">Message: {{ note.message }}</div>
         <div >
           Message:<input type="text" required="true" value="" #editMessage value="{{note.message}}" name="editMessage" >
         </div>
@@ -53,6 +53,17 @@
   
   </div>
   
+</div> -->
+
+<div class="m-2"> AG Grid Sample 
+  <ag-grid-angular
+    style="width: 1500px; height:250px;"
+    class="ag-theme-alpine"
+    [rowData]="notesFromEF"
+    [columnDefs]="columnDefs"
+    [columnTypes]="columnTypes"
+>
+</ag-grid-angular>
 </div>
 
 

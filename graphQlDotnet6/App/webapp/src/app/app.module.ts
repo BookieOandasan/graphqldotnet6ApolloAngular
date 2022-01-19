@@ -9,6 +9,7 @@ import {HttpLink} from 'apollo-angular/http';
 import {InMemoryCache} from '@apollo/client/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     GraphQLModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatCheckboxModule 
+    MatCheckboxModule,
+    AgGridModule.withComponents([])
   ],
   providers: [
     {
