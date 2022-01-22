@@ -8,6 +8,7 @@ using GraphQlApi.Notes;
 using GraphQlApi.Notes.Subscription;
 using GraphQlApi.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -62,7 +63,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    // add altair UI to development only
+     //add altair UI to development only
     app.UseGraphQLAltair();
     app.UseGraphQLPlayground(options: new PlaygroundOptions());
 }
@@ -75,7 +76,7 @@ app.UseAuthorization();
 //app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseWebSockets();
 // make sure all our schemas registered to route
 app.UseGraphQL<ISchema>();
 app.Run();

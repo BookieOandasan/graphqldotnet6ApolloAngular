@@ -1,4 +1,6 @@
 ﻿using GraphQL.Types;
+using GraphQlApi.Notes.Subscription;
+using GraphQlApi.Security;
 
 namespace GraphQlApi.Notes
 {
@@ -8,6 +10,8 @@ namespace GraphQlApi.Notes
         {
             Query = serviceProvider.GetRequiredService<NotesQuery>();
             Mutation   = serviceProvider.GetRequiredService<NotesMutation>();
+            Mutation = serviceProvider.GetRequiredService<AuthMutation>();
+            Subscription = serviceProvider.GetRequiredService<NoteSubscription>();
         }
     }
 }

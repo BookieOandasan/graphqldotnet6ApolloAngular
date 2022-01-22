@@ -5,9 +5,9 @@ using System.Security.Claims;
 
 namespace GraphQlApi.Security
 {
-    public class MyMutation : ObjectGraphType
+    public class AuthMutation : ObjectGraphType
     {
-        public MyMutation(IHttpContextAccessor contextAccessor)
+        public AuthMutation(IHttpContextAccessor contextAccessor)
         {
             FieldAsync<SessionType>(
                 "sessions",
